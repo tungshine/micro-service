@@ -1,4 +1,4 @@
-package com.tanglover.admin;
+package com.tanglover.admin.config;
 
 import de.codecentric.boot.admin.server.domain.entities.InstanceRepository;
 import de.codecentric.boot.admin.server.notify.Notifier;
@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * @author yezhiyuan
@@ -40,8 +41,8 @@ public class NotifierConfiguration {
         return remindingNotifier;
     }
 
-//    @Scheduled(fixedRate = 60_000L) 
-//    public void remind() {
-//        remindingNotifier().sendReminders();
-//    }
+    @Scheduled(fixedRate = 60_000L)
+    public void remind() {
+        remindingNotifier().setReminderStatuses(reminderStatuses);
+    }
 }

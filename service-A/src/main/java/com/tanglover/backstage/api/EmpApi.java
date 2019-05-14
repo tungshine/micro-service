@@ -3,11 +3,8 @@ package com.tanglover.backstage.api;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
@@ -15,9 +12,6 @@ import java.util.Map;
 public class EmpApi extends BaseApi {
 
     private final Logger logger = LoggerFactory.getLogger(EmpApi.class);
-
-    @Autowired
-    private DiscoveryClient client;
 
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.GET)

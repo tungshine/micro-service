@@ -20,6 +20,7 @@
         <module>turbine</module>
         <module>service-admin</module>
         <module>sleuth</module>
+        <module>sso</module>
     </modules>
 
     <parent>

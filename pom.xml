@@ -21,6 +21,7 @@
         <module>service-admin</module>
         <module>sleuth</module>
         <module>sso</module>
+        <module>elasticsearch</module>
     </modules>
 
     <parent>

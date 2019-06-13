@@ -15,6 +15,7 @@ import java.io.IOException;
 public class RequestBodyFilter implements javax.servlet.Filter {
 
     private Logger logger = LoggerFactory.getLogger(RequestBodyFilter.class);
+    static final String UNKNOWN = "unknown";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -45,19 +46,19 @@ public class RequestBodyFilter implements javax.servlet.Filter {
         String ip = null;
         try {
             ip = request.getHeader("X-Forwarded-For");
-            if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            if (null == ip || 0 == ip.length() || UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getHeader("Proxy-Client-IP");
             }
-            if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            if (null == ip || 0 == ip.length() || UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getHeader("WL-Proxy-Client-IP");
             }
-            if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            if (null == ip || 0 == ip.length() || UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getHeader("HTTP_CLIENT_IP");
             }
-            if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            if (null == ip || 0 == ip.length() || UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getHeader("HTTP_X_FORWARDED_FOR");
             }
-            if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            if (null == ip || 0 == ip.length() || UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getRemoteAddr();
             }
         } catch (Exception ignored) {

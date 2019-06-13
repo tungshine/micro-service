@@ -38,21 +38,21 @@ public class EssearchApplicationTests {
                 .addId(System.currentTimeMillis() + "01")
                 .addProductName("无印良品 MUJI 基础润肤化妆水")
                 .addProductDesc("无印良品 MUJI 基础润肤化妆水 高保湿型 200ml")
-                .addCreateTime(new Date()).addUpdateTime(new Date())
+                .addCreateTime(System.currentTimeMillis()).addUpdateTime(System.currentTimeMillis())
                 .builder();
 
         ProductDocument productDocument1 = ProductDocumentBuilder.create()
                 .addId(System.currentTimeMillis() + "02")
                 .addProductName("荣耀 V10 尊享版")
                 .addProductDesc("荣耀 V10 尊享版 6GB+128GB 幻夜黑 移动联通电信4G全面屏游戏手机 双卡双待")
-                .addCreateTime(new Date()).addUpdateTime(new Date())
+                .addCreateTime(System.currentTimeMillis()).addUpdateTime(System.currentTimeMillis())
                 .builder();
 
         ProductDocument productDocument2 = ProductDocumentBuilder.create()
                 .addId(System.currentTimeMillis() + "03")
                 .addProductName("资生堂(SHISEIDO) 尿素红罐护手霜")
                 .addProductDesc("日本进口 资生堂(SHISEIDO) 尿素红罐护手霜 100g/罐 男女通用 深层滋养 改善粗糙")
-                .addCreateTime(new Date()).addUpdateTime(new Date())
+                .addCreateTime(System.currentTimeMillis()).addUpdateTime(System.currentTimeMillis())
                 .builder();
 
         esSearchService.save(productDocument, productDocument1, productDocument2);
@@ -86,7 +86,7 @@ public class EssearchApplicationTests {
     @Test
     public void queryHit() {
 
-        String keyword = "联通尿素";
+        String keyword = "无印良品";
         String indexName = "orders";
 
         List<Map<String, Object>> searchHits = esSearchService.queryHit(keyword, indexName, "productName", "productDesc");

@@ -22,6 +22,7 @@
         <module>sleuth</module>
         <module>sso</module>
         <module>elasticsearch</module>
+        <module>mq</module>
     </modules>
 
     <parent>

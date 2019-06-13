@@ -31,12 +31,12 @@ public class ProductDocumentBuilder {
         return this;
     }
 
-    public ProductDocumentBuilder addCreateTime(Date createTime) {
+    public ProductDocumentBuilder addCreateTime(long createTime) {
         productDocument.setCreateTime(createTime);
         return this;
     }
 
-    public ProductDocumentBuilder addUpdateTime(Date updateTime) {
+    public ProductDocumentBuilder addUpdateTime(long updateTime) {
         productDocument.setUpdateTime(updateTime);
         return this;
     }

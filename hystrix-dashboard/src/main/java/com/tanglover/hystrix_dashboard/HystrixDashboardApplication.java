@@ -15,6 +15,12 @@ import org.springframework.context.annotation.Bean;
  * 2. 在上面的输入框填入: http://想监控的服务:端口/hystrix.stream进行测试
  * 注意：首先要先调用一下想监控的服务的API，否则将会显示一个空的图表.
  */
+
+/**
+ * @Author TangXu
+ * @Description
+ * @Date 2019/6/13 15:00
+ */
 @SpringBootApplication
 @EnableHystrixDashboard
 @EnableEurekaClient
@@ -29,7 +35,7 @@ public class HystrixDashboardApplication {
         HystrixMetricsStreamServlet streamServlet = new HystrixMetricsStreamServlet();
         ServletRegistrationBean registrationBean = new ServletRegistrationBean(streamServlet);
         registrationBean.setLoadOnStartup(1);
-        registrationBean.addUrlMappings("/hystrix.stream");
+        registrationBean.addUrlMappings("/actuator/hystrix.stream");
         registrationBean.setName("HystrixMetricsStreamServlet");
         return registrationBean;
     }

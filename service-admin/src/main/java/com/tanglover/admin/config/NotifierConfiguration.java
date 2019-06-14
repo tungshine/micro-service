@@ -28,7 +28,7 @@ public class NotifierConfiguration {
     @Autowired
     private Notifier notifier;
 
-    //服务上线或者下线都通知
+    // 服务上线或者下线都通知
     private String[] reminderStatuses = {"DOWN"};
 
     private InstanceRepository repository;

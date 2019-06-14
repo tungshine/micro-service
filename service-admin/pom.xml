@@ -14,10 +14,10 @@
     </properties>
 
     <dependencies>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-actuator</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 
         <!--<dependency>-->
             <!--<groupId>org.springframework.cloud</groupId>-->
@@ -29,17 +29,6 @@
             <artifactId>spring-cloud-starter-eureka-server</artifactId>
             <version>1.4.6.RELEASE</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>de.codecentric</groupId>-->
-            <!--<artifactId>spring-boot-admin-server</artifactId>-->
-            <!--<version>2.0.1</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>de.codecentric</groupId>-->
-        <!--<artifactId>spring-boot-admin-server-ui</artifactId>-->
-        <!--<version>2.0.1</version>-->
-        <!--</dependency>-->
 
         <dependency>
             <groupId>de.codecentric</groupId>
@@ -47,11 +36,16 @@
             <version>2.0.1</version>
         </dependency>
 
-
         <dependency>
-            <groupId>org.jolokia</groupId>
-            <artifactId>jolokia-core</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
         </dependency>
+
+
+        <!--<dependency>-->
+            <!--<groupId>org.jolokia</groupId>-->
+            <!--<artifactId>jolokia-core</artifactId>-->
+        <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->
             <!--<artifactId>spring-boot-starter-mail</artifactId>-->

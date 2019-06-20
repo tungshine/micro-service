@@ -16,7 +16,6 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 public class Application {
 
 	public static void main(String[] args) {
-//		new SpringApplicationBuilder(Application.class).web(true).run(args);
 		SpringApplication.run(Application.class, args);
 	}
 

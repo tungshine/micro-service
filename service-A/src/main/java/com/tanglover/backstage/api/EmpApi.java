@@ -18,13 +18,6 @@ public class EmpApi extends BaseApi {
     public Map<String, Object> add() {
         return returnSuccess("1");
     }
-//
-//    //A服务调用B服务
-//    @RequestMapping(value = "testServiceB", method = RequestMethod.GET)
-//    public String testServiceB(@RequestParam Integer a, @RequestParam Integer b) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        return restTemplate.getForObject("http://localhost:7075/add?a=" + a + "&b=" + b, String.class);
-//    }
 
     @Value("${server.port}")
     private String port;
@@ -35,6 +28,7 @@ public class EmpApi extends BaseApi {
         return "hi," + name + "I am a port:" + port;
     }
 
+    @RequestMapping("/hiErr")
     public String hiErr(@RequestParam String name) {
         return "sorry," + name + ",have a error";
     }

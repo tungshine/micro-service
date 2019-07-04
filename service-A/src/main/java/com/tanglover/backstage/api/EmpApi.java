@@ -1,7 +1,7 @@
 package com.tanglover.backstage.api;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.tanglover.starter.service.HelloService;
+import com.tanglover.starter.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,11 @@ public class EmpApi extends BaseApi {
     }
 
     @Autowired
-    private HelloService helloService;
+    private PersonService personService;
 
     @RequestMapping("/test")
     public String test() {
-        return helloService.say("tang");
+        return personService.sayHello();
     }
 
     @Value("${server.port}")

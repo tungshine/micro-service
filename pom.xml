@@ -24,6 +24,7 @@
         <module>elasticsearch</module>
         <module>mq</module>
         <module>tx-spring-boot-starter</module>
+        <module>activiti</module>
     </modules>
 
     <parent>

@@ -15,4 +15,4 @@ RUN echo "http://mirrors.aliyun.com/alpine/v3.6/main" > /etc/apk/repositories \
     && echo "Asia/Shanghai" > /etc/timezone
 ADD  eureka-server-0.0.1-SNAPSHOT.jar  ${MYPATH}/eureka-server_${VERSION}.jar
 ENTRYPOINT ["sh", "-c", "java  ${JAVA_OPTS}  -Djava.security.egd=file:/dev/./urandom  -jar ${MYPATH}/eureka-server_${VERSION}.jar && tail -f /dev/null"]
-EXPOSE 8081
+EXPOSE 7070

@@ -1,5 +1,5 @@
 # base image
-FROM openjdk:8-jdk-alpine
+FROM registry.cn-hangzhou.aliyuncs.com/tangxu/alex:openjdk
 MAINTAINER tom "362615233@qq.com"
 VOLUME /tmp
 ENV VERSION 1.0.0

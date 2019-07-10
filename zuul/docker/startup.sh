@@ -24,9 +24,9 @@ else
     echo "存在$projectname 的镜像 ................ "
 fi
 
-cd ../
-mvn install
-cd ../target &&
-cp zuul-0.0.1-SNAPSHOT.jar ../docker
+cd ../ &&
+mvn install &&
+cd /home/tx_workspace/project_git/micro-service/zuul/target &&
+cp zuul-0.0.1-SNAPSHOT.jar ../docker &&
 cd docker &&
 docker build -t alex/zuul:zuul_v1.0 .

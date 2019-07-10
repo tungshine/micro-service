@@ -38,10 +38,10 @@ public class EmpApi extends BaseApi {
     @Autowired
     private PersonService personService;
 
-    @RequestMapping("/test")
-    public String test() {
-        return personService.sayHello();
-    }
+//    @RequestMapping("/test")
+//    public String test() {
+//        return personService.sayHello();
+//    }
 
     @Value("${server.port}")
     private String port;

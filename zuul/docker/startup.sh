@@ -26,7 +26,7 @@ fi
 
 cd ../
 mvn install
-cd /home/tx_workspace/project_git/zuul/target &&
+cd ../target &&
 cp zuul-0.0.1-SNAPSHOT.jar ../docker
 cd docker &&
 docker build -t alex/zuul:zuul_v1.0 .

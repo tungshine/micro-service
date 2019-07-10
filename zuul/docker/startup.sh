@@ -28,5 +28,5 @@ cd /home/tx_workspace/project_git/micro-service/zuul &&
 mvn install &&
 cd /home/tx_workspace/project_git/micro-service/zuul/target &&
 cp zuul-0.0.1-SNAPSHOT.jar ../docker &&
-cd docker &&
+cd /home/tx_workspace/project_git/micro-service/zuul/docker &&
 docker build -t alex/zuul:zuul_v1.0 .

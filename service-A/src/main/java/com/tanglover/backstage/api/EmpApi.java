@@ -5,7 +5,6 @@ import com.tanglover.backstage.model.American;
 import com.tanglover.backstage.model.Chinese;
 import com.tanglover.backstage.service.CglibService;
 import com.tanglover.backstage.service.EmpService;
-import com.tanglover.starter.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,8 @@ public class EmpApi extends BaseApi {
         return returnSuccess("1");
     }
 
-    @Autowired
-    private PersonService personService;
+//    @Autowired
+//    private PersonService personService;
 
 //    @RequestMapping("/test")
 //    public String test() {

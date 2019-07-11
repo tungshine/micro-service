@@ -25,6 +25,7 @@ else
 fi
 
 cd /home/tx_workspace/project_git/micro-service/zuul &&
+mvn clean &&
 mvn install &&
 cd /home/tx_workspace/project_git/micro-service/zuul/target &&
 cp zuul-0.0.1-SNAPSHOT.jar ../docker &&

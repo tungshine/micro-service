@@ -26,6 +26,7 @@ fi
 
 cd /home/tx_workspace/project_git/micro-service/eureka-server &&
 mvn install &&
+mvn clean &&
 cd target &&
 cp eureka-server-0.0.1-SNAPSHOT.jar ../docker &&
 cd /home/tx_workspace/project_git/micro-service/eureka-server/docker &&

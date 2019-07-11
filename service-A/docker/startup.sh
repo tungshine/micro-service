@@ -1,5 +1,5 @@
 #!/bin/bash
-projectname="service-A_v"
+projectname="service-a_v"
 #首先验证镜像是否存在
 images_id=$(docker images | grep "$projectname" | awk "{print \$3}")
 if [ -n "$images_id" ]; then
@@ -30,4 +30,4 @@ mvn install &&
 cd target &&
 cp service-A-0.0.1-SNAPSHOT.jar ../docker &&
 cd /home/tx_workspace/project_git/micro-service/service-A/docker &&
-docker build -t alex/service-A:service-A_v1.0 .
+docker build -t alex/service-a:service-a_v1.0 .

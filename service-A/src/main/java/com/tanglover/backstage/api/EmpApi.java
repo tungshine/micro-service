@@ -9,8 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -22,28 +26,26 @@ import java.util.Map;
 public class EmpApi extends BaseApi {
 
     private final Logger logger = LoggerFactory.getLogger(EmpApi.class);
+    private final static String UNKNOWN = "unknown";
+
+    @Value("${server.port}")
+    private String port;
 
     @Autowired
     EmpService empService;
     @Autowired
     CglibService cglibService;
 
-    @ResponseBody
+    @RequestMapping("/loadBalance")
+    public Map<String, Object> loadBalance(HttpServletRequest request) {
+        String ipAddress = getIpAddress(request);
+        return returnSuccess(ipAddress);
+    }
+
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public Map<String, Object> add() {
         return returnSuccess("1");
     }
-
-//    @Autowired
-//    private PersonService personService;
-
-//    @RequestMapping("/test")
-//    public String test() {
-//        return personService.sayHello();
-//    }
-
-    @Value("${server.port}")
-    private String port;
 
     @RequestMapping("/hi")
     @HystrixCommand(fallbackMethod = "hiErr")
@@ -75,6 +77,30 @@ public class EmpApi extends BaseApi {
         logger.info("EmpApi ==> talk method : {}", chinese.getClass());
         logger.info("EmpApi ==> talk method : {}", american.getClass());
         return "success";
+    }
+
+    public String getIpAddress(HttpServletRequest request) {
+        String ip = null;
+        try {
+            ip = request.getHeader("X-Forwarded-For");
+            if (null == ip || 0 == ip.length() || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("Proxy-Client-IP");
+            }
+            if (null == ip || 0 == ip.length() || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (null == ip || 0 == ip.length() || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_CLIENT_IP");
+            }
+            if (null == ip || 0 == ip.length() || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+            }
+            if (null == ip || 0 == ip.length() || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getRemoteAddr();
+            }
+        } catch (Exception ignored) {
+        }
+        return ip == null ? "" : ip;
     }
 
 }

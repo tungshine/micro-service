@@ -1,5 +1,5 @@
 #!/bin/bash
-projectname="service_center_v"
+projectname="service-center_v"
 #首先验证镜像是否存在
 images_id=$(docker images | grep "$projectname" | awk "{print \$3}")
 if [ -n "$images_id" ]; then
@@ -30,4 +30,4 @@ mvn install &&
 cd target &&
 cp service-center-0.0.1-SNAPSHOT.jar ../docker &&
 cd /home/tx_workspace/project_git/micro-service/service-center/docker &&
-docker build -t alex/service_center:service_center_v1.0 .
+docker build -t alex/service-center:service-center_v1.0 .

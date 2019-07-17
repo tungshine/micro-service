@@ -2,7 +2,7 @@
 <configuration scan="true" dubug="false" scanPeriod="60 seconds">
     <!--  <include resource="org/springframework/boot/logging/logback/base.xml"/> -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <contextName>trh-bill</contextName>
+    <contextName>service-mall</contextName>
     <!--<springProperty scope="context" name="elk_master_ip" source="elk_master_ip" defaultValue=""/>-->
     <!--<springProperty scope="context" name="elk_master_port" source="elk_master_port" defaultValue=""/>-->
     <property name="LOG_PATH" value="logs"></property>

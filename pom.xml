@@ -10,7 +10,7 @@
         <module>service-center</module>
         <module>config-server</module>
         <module>zuul</module>
-        <module>service-A</module>
+        <module>service-mall</module>
         <module>service-B</module>
         <module>service-B2</module>
         <module>hystrix-ribbon</module>
@@ -25,6 +25,7 @@
         <module>mq</module>
         <module>tx-spring-boot-starter</module>
         <module>activiti</module>
+        <module>tx-lock-spring-boot-starter</module>
     </modules>
 
     <parent>
@@ -45,6 +46,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.37</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 </project>

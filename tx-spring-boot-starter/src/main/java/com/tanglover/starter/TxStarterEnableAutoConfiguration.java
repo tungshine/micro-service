@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnClass(PersonService.class)
 @EnableConfigurationProperties(PersonProperties.class)
-//@ConditionalOnProperty(prefix = "spring.person", value = "enabled", matchIfMissing = true)
 public class TxStarterEnableAutoConfiguration {
 
     @Autowired

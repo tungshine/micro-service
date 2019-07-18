@@ -64,6 +64,7 @@ public class UserService {
                     long updateProduct = productMapper.updateProduct(product);
                     if (-1 != updateProduct) {
                         LOGGER.info("update success:{}", updateProduct);
+                        LOGGER.info("userId为: {} 的用户抢购成功，抢购数量为: {} 个", userId, count);
                         retMap.put("resp", "抢购成功");
                     } else {
                         LOGGER.error("update failed:{}", updateProduct);
@@ -71,6 +72,7 @@ public class UserService {
                     }
                 } else {
                     // TODO 记录没有抢购到记录，以便后期给该用户推送相同类产品抢购的活动
+                    LOGGER.info("userId为: {} 的用户抢购失败，库存不足", userId);
                     retMap.put("resp", "无货");
                 }
             } catch (Exception e) {

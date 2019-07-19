@@ -21,7 +21,7 @@ public interface ProductMapper {
      * @param id
      * @return
      */
-    @Select("SELECT * FROM product")
+    @Select("SELECT * FROM product WHERE id = #{id}")
     Product selectByKey(@Param("id") Long id);
 
     /**
@@ -32,5 +32,14 @@ public interface ProductMapper {
      */
     @UpdateProvider(type = ProductProvider.class, method = "update")
     long updateProduct(Product product);
+
+    /**
+     * 增加库存
+     *
+     * @param product
+     * @return
+     */
+    @UpdateProvider(type = ProductProvider.class, method = "increaseProductStock")
+    long increaseProductStock(Product product);
 
 }

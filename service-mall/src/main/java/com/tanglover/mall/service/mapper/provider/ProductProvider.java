@@ -14,11 +14,22 @@ public class ProductProvider extends SQL {
         return new SQL() {
             {
                 UPDATE("Product");
-                SET("version = #{version} + 1");
-//                if (0 != product.getStock()) {
-//                    SET("stock = #{stock}");
-//                }
-                SET("stock = #{stock}");
+                SET("version = version + 1");
+                SET("stock = stock - #{stock}");
+                if (0 != product.getModify_time()) {
+                    SET("modify_time = #{modify_time}");
+                }
+                WHERE("id = #{id}", "version = #{version}");
+            }
+        }.toString();
+    }
+
+    public String increaseProductStock(Product product) {
+        return new SQL() {
+            {
+                UPDATE("Product");
+                SET("version = version + 1");
+                SET("stock = stock + #{stock}");
                 if (0 != product.getModify_time()) {
                     SET("modify_time = #{modify_time}");
                 }

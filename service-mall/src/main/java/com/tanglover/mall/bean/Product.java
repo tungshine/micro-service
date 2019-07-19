@@ -1,5 +1,6 @@
 package com.tanglover.mall.bean;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +9,7 @@ import lombok.Setter;
  * @create 2019-07-16 15:05
  * @description:
  */
-@Getter
-@Setter
+@Data
 public class Product {
     private long id;
     private String product_no;

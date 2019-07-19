@@ -1,6 +1,5 @@
 package com.tanglover.mall.service;
 
-import com.google.common.collect.Maps;
 import com.tanglover.mall.bean.Product;
 import com.tanglover.mall.service.mapper.ProductMapper;
 import org.redisson.api.RLock;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -51,40 +51,53 @@ public class UserService {
     }
 
     public Map<String, Object> grabForRedis(Long userId, Long productId, Long count) {
-        HashMap<String, Object> retMap = Maps.newHashMap();
+        Map<String, Object> retMap = new HashMap<>();
         String key = "user_id_" + userId + "_product_id_" + productId;
-        String value = key + "_" + count + "";
-        Boolean ifAbsent = redisTemplate.opsForValue().setIfAbsent(key, value);
-        if (ifAbsent) {
-            try {
-                Product product = productMapper.selectByKey(productId);
-                if (null != product && count <= product.getStock()) {
-                    product.setStock(product.getStock() - count);
-                    product.setModify_time(System.currentTimeMillis());
-                    long updateProduct = productMapper.updateProduct(product);
-                    if (-1 != updateProduct) {
-                        LOGGER.info("update success:{}", updateProduct);
-                        LOGGER.info("userId为: {} 的用户抢购成功，抢购数量为: {} 个", userId, count);
-                        retMap.put("resp", "抢购成功");
-                    } else {
-                        LOGGER.error("update failed:{}", updateProduct);
-                        retMap.put("resp", "抢购失败");
-                    }
-                } else {
-                    // TODO 记录没有抢购到记录，以便后期给该用户推送相同类产品抢购的活动
-                    LOGGER.info("userId为: {} 的用户抢购失败，库存不足", userId);
-                    retMap.put("resp", "无货");
+        Boolean ifAbsent = true;
+
+        while (ifAbsent) {
+            String value = System.nanoTime() + UUID.randomUUID().toString();
+            ifAbsent = redisTemplate.opsForValue().setIfAbsent(key, value);
+            if (ifAbsent) {
+                try {
+                    ifAbsent = false;
+                    Product product = productMapper.selectByKey(productId);
+                    if (null != product && count <= product.getStock()) {
+                        product.setStock(count);
+                        product.setModify_time(System.currentTimeMillis());
+                        long updateProduct = productMapper.updateProduct(product);
+                        if (0 < updateProduct) {
+                            LOGGER.info("update success:{}", updateProduct);
+                            LOGGER.info("userId为: {} 的用户抢购成功，抢购数量为: {} 个", userId, count);
+                            retMap.put("resp", "抢购成功");
+                        } /*else {
+                            LOGGER.error("update failed:{}", updateProduct);
+                            retMap.put("resp", "抢购失败");
+                        }*/
+                    } /*else {
+                        // TODO 记录没有抢购到记录，以便后期给该用户推送相同类产品抢购的活动
+                        LOGGER.info("userId为: {} 的用户抢购失败，库存不足", userId);
+                        retMap.put("resp", "无货");
+                    }*/
+                } catch (Exception e) {
+                    LOGGER.error("update error:{}", e.getMessage());
+                    retMap.put("resp", "抢购失败");
+                } finally {
+                    redisTemplate.delete(key);
                 }
-            } catch (Exception e) {
-                LOGGER.error("update error:{}", e.getMessage());
-                retMap.put("resp", "抢购失败");
-            } finally {
-                redisTemplate.delete(key);
+
+            } else {
+                // TODO 记录没有抢购到记录，以便后期给该用户推送相同类产品抢购的活动
+//                retMap.put("resp", "无货");
+                try {
+                    ifAbsent = true;
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        } else {
-            // TODO 记录没有抢购到记录，以便后期给该用户推送相同类产品抢购的活动
-            retMap.put("resp", "无货");
         }
+
         return retMap;
     }
 }

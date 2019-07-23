@@ -173,9 +173,8 @@ public class HttpUtils {
      * @param msg
      * @return
      */
-    public static byte[] errorBytes(HttpServletRequest request, HttpServletResponse response, long errorCode, String msg) {
+    public static byte[] errorBytes(HttpServletResponse response, long errorCode, String msg) {
         String str = error(errorCode, msg);
-        request.setAttribute("RESPONSE_DATA", JSONObject.parseObject(str));
         return wrapMSG(response, str);
     }
 
@@ -257,6 +256,57 @@ public class HttpUtils {
             datajson = JSONObject.parseObject(tail);
             datajson.put("version", version);
             return datajson;
+        } catch (UnsupportedEncodingException e) {
+            logger.error("e:", e);
+        }
+        return null;
+    }
+
+    /**
+     * 解密http请求内容,对字节做解密处理
+     *
+     * @param content
+     * @return
+     */
+    public static JSONObject decrypt2(byte[] content) {
+        int index = -1;
+        for (int i = 0; i < content.length; i++) {
+            if (content[i] == (byte) 0) {
+                index = i;
+                break;
+            }
+        }
+        if (index < 0) {
+            return null;
+        }
+        String shead = new String(ByteUtils.copy(content, 0, index));
+        byte[] tail = ByteUtils.copy(content, index + 1, content.length - index - 1);
+
+        try {
+            //数据json
+            JSONObject datajson = null;
+
+            JSONObject json = JSONObject.parseObject(shead);
+            if (json == null) {
+                return JSONObject.parseObject(new String(tail, "UTF-8"));
+            }
+            //这里拿取 app_id version
+            String app_id = json.getString("app_id");
+            String version = json.getString("version");
+
+            // 不加密
+            if ("0".equals(json.getString("version"))) {
+                datajson = JSONObject.parseObject(new String(tail, "UTF-8"));
+                datajson.put("version", version);
+                return datajson;
+            } else {// 加密
+                byte[] key = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 0, 0, 0, 0, 0, 0};
+                byte[] bjsonmsg = XxteaUtil.decrypt(tail, key);
+                String str = new String(bjsonmsg, "UTF-8");
+                datajson = JSONObject.parseObject(str);
+                datajson.put("version", version);
+                return datajson;
+            }
         } catch (UnsupportedEncodingException e) {
             logger.error("e:", e);
         }

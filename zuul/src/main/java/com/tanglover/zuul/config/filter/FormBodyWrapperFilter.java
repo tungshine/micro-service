@@ -1,11 +1,14 @@
 package com.tanglover.zuul.config.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.http.HttpServletRequestWrapper;
 import com.netflix.zuul.http.ServletInputStreamWrapper;
 import com.tanglover.zuul.config.Configuration;
+import com.tanglover.zuul.error.ErrorCodeConstant;
 import com.tanglover.zuul.utils.HttpUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +47,11 @@ import static org.springframework.cloud.netflix.zuul.filters.support.FilterConst
  * @description: 代理进行适配, 避免对数据重复encode
  */
 @Component
-public class FormBodyWrapperFilter {
+public class FormBodyWrapperFilter extends ZuulFilter {
     private static Logger logger = LoggerFactory.getLogger(FormBodyWrapperFilter.class);
 
     private static final String X_FORWARDED_FOR = "X-Forwarded-For";
-    private static final String X_Real_IP = "X-Real-IP";
+    private static final String X_REAL_IP = "X-Real-IP";
     @Autowired
     private Configuration config;
     @Autowired
@@ -73,6 +76,7 @@ public class FormBodyWrapperFilter {
         this.servletRequestField.setAccessible(true);
     }
 
+    @Override
     public String filterType() {
         return PRE_TYPE;
     }
@@ -132,7 +136,7 @@ public class FormBodyWrapperFilter {
 //		ctx.getZuulRequestHeaders().put(X_FORWARDED_FOR, remoteAddr);
         ctx.getZuulRequestHeaders().put(X_FORWARDED_FOR, IpUtils.getIpAddr(request));
         try {
-            ctx.getZuulRequestHeaders().put(X_Real_IP, request.getHeader("X-Real-IP"));
+            ctx.getZuulRequestHeaders().put(X_REAL_IP, request.getHeader("X-Real-IP"));
         } catch (Exception e) {
 
         }
@@ -175,7 +179,7 @@ public class FormBodyWrapperFilter {
                 logger.info("ppgame_marker:forbidden:请求接口={},IP={}，请求数据={}", request.getRequestURI(), IpUtils.getIpAddr(request), json.toJSONString());
 
                 //设置返回数据
-                body = HttpUtils.errorBytes(ctx.getResponse(), ErrorCodeConstant.ERROR_INTECEPTOR.code, ErrorCodeConstant.ERROR_INTECEPTOR.message);
+                body = HttpUtils.errorBytes(ctx.getResponse(), ErrorCodeConstant.ERROR_INTERCEPTOR.code, ErrorCodeConstant.ERROR_INTERCEPTOR.message);
                 ctx.setResponseBody(new String(body, "UTF-8"));
 
             } catch (Exception e) {
@@ -205,35 +209,29 @@ public class FormBodyWrapperFilter {
             if (length == 0) {
                 return null;
             }
-//			logger.info("--------------length={}---------------",length);
+            logger.info("--------------length={}---------------", length);
 
             //这里检查是否存在异常 如果存在 则做异常处理 就不进行后面的过滤器处理了
             if (wrapper.getExistException()) {
                 //存在异常
                 //过滤该请求，不往下级服务去转发请求，到此结束
-                ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
-                ctx.setResponseStatusCode(401);// 返回错误码
+                // 过滤该请求，不对其进行路由
+                ctx.setSendZuulResponse(false);
+                // 返回错误码
+                ctx.setResponseStatusCode(401);
                 ctx.set("isSuccess", false);
                 //设置返回数据
                 try {
-                    byte[] body = HttpUtils.errorBytes(ctx.getResponse(), ErrorCodeConstant.ERROR_INTECEPTOR.code, ErrorCodeConstant.ERROR_INTECEPTOR.message);
+                    byte[] body = HttpUtils.errorBytes(ctx.getResponse(), ErrorCodeConstant.ERROR_INTERCEPTOR.code, ErrorCodeConstant.ERROR_INTERCEPTOR.message);
                     ctx.setResponseBody(new String(body, "UTF-8"));
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
-
-
                 return null;
-
             }
-
-
         }
-
-
         return null;
     }
-
 
     /**
      * 包装HttpServletRequest 进行数据重组
@@ -241,22 +239,19 @@ public class FormBodyWrapperFilter {
     private class FormBodyRequestWrapper extends HttpServletRequestWrapper {
 
         private HttpServletRequest request;
-
         private byte[] contentData;
-
         private MediaType contentType;
-
         private int contentLength;
 
-        //是否存在异常 true : 存在 false:不存在
+        /**
+         * 是否存在异常 true : 存在 false:不存在
+         */
         private boolean ExistException = false;
-
 
         public FormBodyRequestWrapper(HttpServletRequest request) {
             super(request);
             this.request = request;
         }
-
 
         public boolean getExistException() {
             return ExistException;
@@ -265,7 +260,6 @@ public class FormBodyWrapperFilter {
         public void setExistException(boolean existException) {
             ExistException = existException;
         }
-
 
         @Override
         public String getContentType() {
@@ -289,6 +283,7 @@ public class FormBodyWrapperFilter {
             return this.contentLength;
         }
 
+        @Override
         public long getContentLengthLong() {
             return getContentLength();
         }
@@ -301,7 +296,6 @@ public class FormBodyWrapperFilter {
             return new ServletInputStreamWrapper(this.contentData);
         }
 
-
         /**
          * 对请求流里面的数据进行解析重组
          */
@@ -311,33 +305,25 @@ public class FormBodyWrapperFilter {
                 //设置输出流--response数据的内容格式等
                 FormHttpOutputMessage data = new FormHttpOutputMessage();
 
-				/*this.contentType = MediaType.valueOf(this.request.getContentType());
-				data.getHeaders().setContentType(this.contentType);
-				//MyFormBodyWrapperFilter.this.formHttpMessageConverter.write(builder, this.contentType, data);
-				// copy new content type including multipart boundary
-				this.contentType = data.getHeaders().getContentType();*/
-
                 if (this.request.getContentType() == null) {
                     this.contentType = MediaType.parseMediaType("application/x-www-form-urlencoded");
                 } else {
                     this.contentType = MediaType.valueOf(this.request.getContentType());
                 }
                 data.getHeaders().setContentType(this.contentType);
-                //MyFormBodyWrapperFilter.this.formHttpMessageConverter.write(builder, this.contentType, data);
-                // copy new content type including multipart boundary
-                //this.contentType = data.getHeaders().getContentType();
-
 
                 // 1.对内容格式进行验证
                 JSONObject json = null;
                 byte[] body = null;
                 try {
-                    body = HttpUtils.readBody(request);// 从body读取数据
+                    // 从body读取数据
+                    body = HttpUtils.readBody(request);
                     if (body.length > 0) {
                         //这里判断是JS请求过来的 还是  APP请求过来的
                         String pjd_encrypt = request.getHeader("pjd_encrypt");
                         String pjdencrypt = request.getHeader("pjdencrypt");
-                        if ((null != pjd_encrypt && "9527".equalsIgnoreCase(pjd_encrypt)) || (null != pjdencrypt && "9527".equalsIgnoreCase(pjdencrypt))) {
+                        if ((null != pjd_encrypt && "9527".equalsIgnoreCase(pjd_encrypt))
+                                || (null != pjdencrypt && "9527".equalsIgnoreCase(pjdencrypt))) {
                             logger.info("pjd_encrypt===================================" + pjd_encrypt);
                             json = HttpUtils.decryptJsBase64(body);
                             if (json == null || json.isEmpty()) {
@@ -355,20 +341,10 @@ public class FormBodyWrapperFilter {
                     this.contentData = json.toString().getBytes();
                 } else {
                     logger.debug("body is null  没有进行加密传递");
-					/*try {
-						json = JSONObject.parseObject(new String(body,"utf-8"));
-					} catch (UnsupportedEncodingException e) {
-						logger.error("请求数据转换json错误.....",e);
-						json = new JSONObject();
-					}
-					this.contentData = body;
-					*/
 
                     this.contentData = "{\"message\":\"data is not entry\",\"error\":1}".getBytes();
                 }
-                //this.contentData = IOUtils.toByteArray(request.getInputStream());
                 this.contentLength = this.contentData.length;
-
 
                 //by jxh 2018-5-31 对IP拦截处理
                 if (json != null && !json.isEmpty() && json.containsKey("pwd")) {
@@ -378,9 +354,7 @@ public class FormBodyWrapperFilter {
                     if (StringUtils.hasLength(ip)) {
                         json.put("ip", ip);
                     }
-
                 }
-
 
                 //by jxh 2018-7-5 对邮箱进行正则表达式检查
                 if (ipUtils.isExistForbiddenEmail(config, request, json)) {
@@ -389,12 +363,10 @@ public class FormBodyWrapperFilter {
                     setExistException(true);
                 }
 
-
             } catch (Exception e) {
                 throw new IllegalStateException("Cannot convert form data", e);
             }
         }
-
 
         private byte[] getData(MultiValueMap<String, Object> builder) {
             for (Map.Entry<String, List<Object>> entry : builder.entrySet()) {
@@ -403,23 +375,6 @@ public class FormBodyWrapperFilter {
             }
             return null;
         }
-
-//		private synchronized void buildContentData() {
-//			try {
-//				MultiValueMap<String, Object> builder = RequestContentDataExtractor.extract(this.request);
-//				FormHttpOutputMessage data = new FormHttpOutputMessage();
-//
-//				this.contentType = MediaType.valueOf(this.request.getContentType());
-//				data.getHeaders().setContentType(this.contentType);
-//				MyFormBodyWrapperFilter.this.formHttpMessageConverter.write(builder, this.contentType, data);
-//				// copy new content type including multipart boundary
-//				this.contentType = data.getHeaders().getContentType();
-//				this.contentData = data.getInput();
-//				this.contentLength = this.contentData.length;
-//			} catch (Exception e) {
-//				throw new IllegalStateException("Cannot convert form data", e);
-//			}
-//		}
 
         private class FormHttpOutputMessage implements HttpOutputMessage {
 
@@ -440,11 +395,8 @@ public class FormBodyWrapperFilter {
                 this.output.flush();
                 return this.output.toByteArray();
             }
-
         }
-
     }
-
 
     /***
      * 处理防刷IP拦截
@@ -455,18 +407,17 @@ public class FormBodyWrapperFilter {
         try {
             //首先判断 禁用的IP段功能开关 0:开启 1：关闭  是否开启
             int state = 0;
-            if (StringUtils.hasLength(config.getForbidden_ips_state())) {
-                state = Integer.parseInt(config.getForbidden_ips_state().trim());
+            if (StringUtils.hasLength(config.getFORBIDDEN_IPS_STATE())) {
+                state = Integer.parseInt(config.getFORBIDDEN_IPS_STATE().trim());
             }
             if (state == 1) {
                 return false;
             }
 
-
             String this_request_uri = request.getRequestURI().replace("/", "");
 
             //对需要筛选的接口进行判定
-            String request_uri = config.getForbidden_ips_uri();
+            String request_uri = config.getFORBIDDEN_IPS_URI();
             if (!StringUtils.hasLength(request_uri)) {
                 return false;
             }
@@ -485,23 +436,21 @@ public class FormBodyWrapperFilter {
             //对IP获取代理入口IP--即 客户端真实IP
             ip = ip.split(",")[0];
 
-
             //IP白名单检查处理
-            if (ipUtils.isAllowIp(ip, config.getAllow_ips())) {
+            if (ipUtils.isAllowIp(ip, config.getALLOW_IPS())) {
                 //正常返回--不予拦截
                 return false;
             }
 
-
             //IP黑名单检查处理
-            if (ipUtils.isForbidenIp(ip, config.getForbidden_ips())) {
+            if (ipUtils.isForbiddenIp(ip, config.getFORBIDDEN_IPS())) {
                 //拦截处理
                 return true;
             }
 
             //程序自动算法进行IP处理
-            long expireSeconds = Integer.parseInt(config.getForbidden_ips_time());
-            int allow_count = Integer.parseInt(config.getForbidden_ips_count());
+            long expireSeconds = Integer.parseInt(config.getFORBIDDEN_IPS_TIME());
+            int allow_count = Integer.parseInt(config.getFORBIDDEN_IPS_COUNT());
             if (ipUtils.RecordIPAndCount(ip, expireSeconds, allow_count)) {
                 //超出了允许次数 把IP加入黑名单 直接拒绝请求
                 return true;

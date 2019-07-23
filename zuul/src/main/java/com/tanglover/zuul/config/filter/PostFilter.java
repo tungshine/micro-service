@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
+import com.tanglover.zuul.elk.RequestMessageModel;
+import com.tanglover.zuul.error.ErrorCodeConstant;
 import com.tanglover.zuul.utils.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,17 +68,13 @@ public class PostFilter extends ZuulFilter {
                     return null;
                 }
 
-
                 InputStream stream_request = request.getInputStream();
                 String request_content = StreamUtils.copyToString(stream_request, Charset.forName("UTF-8"));
-
 
                 InputStream stream_response = ctx.getResponseDataStream();
                 content = StreamUtils.copyToString(stream_response, Charset.forName("UTF-8"));
 
-
                 if (request_content != null && content != null) {
-
                     JSONObject json_request = null;
                     JSONObject json_response = null;
                     try {
@@ -91,8 +89,7 @@ public class PostFilter extends ZuulFilter {
                         rmm.setProject("account_read_zuul");
                         rmm.setRequestJSON(json_request);
                         rmm.setResponseJSON(json_response);
-                        rmm.setRequesturi(request.getRequestURI());
-
+                        rmm.setRequestUri(request.getRequestURI());
                         logger.info(MarkerFactory.getMarker("account_read_zuul"), JSONObject.toJSONString(rmm));
                     }
                     //返回结果
@@ -100,32 +97,25 @@ public class PostFilter extends ZuulFilter {
                 } else {
                     //异常数据 直接返回统一说明
                     //设置返回数据
-                    byte[] body = HttpUtils.errorBytes(ctx.getResponse(), ErrorCodeConstant.ERROR_INTECEPTOR.code, ErrorCodeConstant.ERROR_INTECEPTOR.message);
+                    byte[] body = HttpUtils.errorBytes(ctx.getResponse(), ErrorCodeConstant.ERROR_INTERCEPTOR.code, ErrorCodeConstant.ERROR_INTERCEPTOR.message);
                     ctx.setResponseBody(new String(body, "UTF-8"));
                 }
 
             } else {
                 //业务服务器返回错误状态码---暂时不给予处理
-
-
             }
-
 
         } catch (Exception e) {
             logger.error("解析response 返回数据错误", e);
 
             //设置返回数据
             try {
-                byte[] body = HttpUtils.errorBytes(ctx.getResponse(), ErrorCodeConstant.ERROR_INTECEPTOR.code, ErrorCodeConstant.ERROR_INTECEPTOR.message);
+                byte[] body = HttpUtils.errorBytes(ctx.getResponse(), ErrorCodeConstant.ERROR_INTERCEPTOR.code, ErrorCodeConstant.ERROR_INTERCEPTOR.message);
                 ctx.setResponseBody(new String(body, "UTF-8"));
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-
         }
-
-        return null;
-
         return null;
     }
 }

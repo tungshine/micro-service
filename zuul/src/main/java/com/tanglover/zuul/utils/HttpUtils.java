@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,35 +15,18 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 针对返回json数据格式做处理
- *
- * @author huangxiaolong@2017-08-31
+ * @Author TangXu
+ * @Description 针对返回json数据格式做处理
+ * @Date 2019/7/23 9:52
  */
 public class HttpUtils {
     private static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
     final static String RESULT = "result";
     final static String MSG = "msg";
-    final public static int STATUS_SUCCESS = 0;// 状态码：0代表成功，其它代表失败
-
-    // /**
-    // * 读取body内容
-    // *
-    // * @param request
-    // * @return
-    // */
-    // public static byte[] readBody(HttpServletRequest request) {
-    // byte[] body = null;
-    // try {
-    // // 读取body内容
-    // int len = request.getContentLength();
-    // ServletInputStream iii = request.getInputStream();
-    // body = new byte[len];
-    // iii.read(body, 0, len);
-    // } catch (IOException e) {
-    // logger.error("读取body失败,e:", e);
-    // }
-    // return body;
-    // }
+    /**
+     * 状态码：0代表成功，其它代表失败
+     */
+    final public static int STATUS_SUCCESS = 0;
 
     /**
      * 读取body内容
@@ -84,7 +68,7 @@ public class HttpUtils {
     public static JSONObject getJSONObject(HttpServletRequest request) {
         String data = null;
         try {
-            byte[] body = IOUtils.toByteArray(request.getInputStream());
+            byte[] body = readBody(request);
             data = new String(body, "UTF-8");
             logger.info("getJSONObject request data is : " + data);
         } catch (IOException e) {
@@ -102,7 +86,7 @@ public class HttpUtils {
     public static Object parseObject(HttpServletRequest request, Class<?> clazz) {
         String data = null;
         try {
-            byte[] body = IOUtils.toByteArray(request.getInputStream());
+            byte[] body = readBody(request);
             data = new String(body, "UTF-8");
             logger.info("getJSONObject request data is : " + data);
             return JSONObject.parseObject(data, clazz);
@@ -150,12 +134,13 @@ public class HttpUtils {
 
         try {
             JSONObject json = JSONObject.parseObject(shead);
-            if ("0".equals(json.getString("version"))) {// 不加密
+            // 不加密
+            if ("0".equals(json.getString("version"))) {
                 return JSONObject.parseObject(new String(tail, "UTF-8"));
             } else {// 加密
                 byte[] key = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 0, 0, 0, 0, 0, 0};
-                byte[] bjsonmsg = XXTEA.decrypt(tail, key);
-                String str = new String(bjsonmsg, "UTF-8");
+                byte[] bJsonMsg = XxteaUtil.decrypt(tail, key);
+                String str = new String(bJsonMsg, "UTF-8");
                 return JSONObject.parseObject(str);
             }
         } catch (UnsupportedEncodingException e) {
@@ -172,11 +157,6 @@ public class HttpUtils {
      * @return
      */
     public static String error(long errorCode, String msg) {
-		 /*JSONObject json = new JSONObject();
-		 json.put(RESULT, errorCode);
-		 json.put(MSG, msg);
-		 return json.toString();*/
-
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         sb.append("\"").append(RESULT).append("\"").append(":").append(errorCode);
@@ -193,34 +173,11 @@ public class HttpUtils {
      * @param msg
      * @return
      */
-//	public static byte[] errorBytes(HttpServletResponse response, long errorCode, String msg) {
-//		String str = error(errorCode, msg);
-//		return wrapMSG(response, str);
-//	}
-
-    /**
-     * 返回字节类型
-     *
-     * @param errorCode
-     * @param msg
-     * @return
-     */
     public static byte[] errorBytes(HttpServletRequest request, HttpServletResponse response, long errorCode, String msg) {
         String str = error(errorCode, msg);
         request.setAttribute("RESPONSE_DATA", JSONObject.parseObject(str));
         return wrapMSG(response, str);
     }
-
-    /**
-     * 成功后返回字节类型
-     *
-     * @param errorCode
-     * @param msg
-     * @return
-     */
-//	public static byte[] successBytes(HttpServletResponse response, String jsonStr) {
-//		return wrapMSG(response, jsonStr);
-//	}
 
     /**
      * 成功后返回字节类型
@@ -257,6 +214,53 @@ public class HttpUtils {
         }
 
         return json;
+    }
+
+    /**
+     * 解密http请求内容,对字节做解密处理
+     *
+     * @param content_old
+     * @return
+     */
+    public static JSONObject decryptJsBase64(byte[] content_old) {
+
+        String keys = "1234567890";
+        try {
+            String sss = new String(content_old, "UTF-8");
+            String resultData = XxteaUtil.decryptStrBase64(sss.replaceAll("\"", ""), "UTF-8", keys);
+            if (!StringUtils.hasLength(resultData)) {
+                return null;
+            }
+
+            int index = resultData.indexOf("}0");
+            if (index < 1) {
+                return null;
+            }
+
+            String shead = resultData.substring(0, index + 1);
+            if (!StringUtils.hasLength(shead)) {
+                return null;
+            }
+            String tail = resultData.substring(index + 2);
+            if (!StringUtils.hasLength(tail)) {
+                return null;
+            }
+
+            JSONObject datajson = null;
+            JSONObject json = JSONObject.parseObject(shead);
+            if (json == null) {
+                return JSONObject.parseObject(tail);
+            }
+            //这里拿取 app_id version
+            String app_id = json.getString("app_id");
+            String version = json.getString("version");
+            datajson = JSONObject.parseObject(tail);
+            datajson.put("version", version);
+            return datajson;
+        } catch (UnsupportedEncodingException e) {
+            logger.error("e:", e);
+        }
+        return null;
     }
 
 }

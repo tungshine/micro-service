@@ -1,8 +1,15 @@
 package com.tanglover.zuul.utils;
 
-import java.io.UnsupportedEncodingException;
+import org.springframework.util.Base64Utils;
 
-public class XXTeaUtil {
+import java.io.UnsupportedEncodingException;
+/**
+ * @Author TangXu
+ * @Description 
+ * @Date 2019/7/23 9:51
+ * @Param 
+ */
+public class XxteaUtil {
     /**
      * Encrypt data with key.
      *
@@ -14,8 +21,7 @@ public class XXTeaUtil {
         if (data.length == 0) {
             return data;
         }
-        return toByteArray(
-                encrypt(toIntArray(data, true), toIntArray(key, false)), false);
+        return toByteArray(encrypt(toIntArray(data, true), toIntArray(key, false)), false);
     }
 
     /**
@@ -29,8 +35,7 @@ public class XXTeaUtil {
         if (data.length == 0) {
             return data;
         }
-        return toByteArray(
-                decrypt(toIntArray(data, false), toIntArray(key, false)), true);
+        return toByteArray(decrypt(toIntArray(data, false), toIntArray(key, false)), true);
     }
 
     /**
@@ -197,9 +202,9 @@ public class XXTeaUtil {
     /**
      * 使用XXTea 算法加密字符串
      *
-     * @param plain 被加密的字符串
+     * @param plain   被加密的字符串
      * @param charset 字符集
-     * @param key 密钥
+     * @param key     密钥
      * @return 加密之后的hex 字符串
      * @throws UnsupportedEncodingException
      */
@@ -216,9 +221,9 @@ public class XXTeaUtil {
     /**
      * 使用XXTea 算法解密字符串
      *
-     * @param hexStr 加密之后的hex 字符串
+     * @param hexStr  加密之后的hex 字符串
      * @param charset 字符集
-     * @param key 密钥
+     * @param key     密钥
      * @return 解密之后的字符串
      * @throws UnsupportedEncodingException
      */
@@ -232,14 +237,68 @@ public class XXTeaUtil {
         return new String(bytes, charset);
     }
 
+
+    /**
+     * 使用XXTea 算法加密字符串
+     *
+     * @param plain   被加密的字符串
+     * @param charset 字符集
+     * @param key     密钥
+     * @return 加密之后的hex 字符串
+     * @throws UnsupportedEncodingException
+     */
+    public static String encryptStrBase64(String plain, String charset, String key)
+            throws UnsupportedEncodingException {
+        if (plain == null || charset == null || key == null) {
+            return null;
+        }
+        byte[] bytes = encrypt(plain.getBytes(charset), key.getBytes(charset));
+        return Base64Utils.encodeToString(bytes);
+    }
+
+    /**
+     * 使用XXTea 算法解密字符串
+     *
+     * @param hexStr  加密之后的hex 字符串
+     * @param charset 字符集
+     * @param key     密钥
+     * @return 解密之后的字符串
+     * @throws UnsupportedEncodingException
+     */
+    public static String decryptStrBase64(String hexStr, String charset, String key)
+            throws UnsupportedEncodingException {
+        if (hexStr == null || charset == null || key == null) {
+            return null;
+        }
+        byte[] bytes = decrypt(Base64Utils.decodeFromString(hexStr), key.getBytes(charset));
+        return new String(bytes, charset);
+    }
+
+    public static String decryptStrBase64(byte[] hexStr, String charset, String key)
+            throws UnsupportedEncodingException {
+        if (hexStr == null || charset == null || key == null) {
+            return null;
+        }
+        byte[] bytes = decrypt(Base64Utils.decode(hexStr), key.getBytes(charset));
+        return new String(bytes, charset);
+    }
+
+    public static byte[] decryptByteBase64(byte[] hexStr, String charset, String key)
+            throws UnsupportedEncodingException {
+        if (hexStr == null || charset == null || key == null) {
+            return null;
+        }
+        return decrypt(Base64Utils.decodeFromString(new String(hexStr, charset)), key.getBytes(charset));
+    }
+
     /* -------------------------------自定义方法结束----------------------------------- */
     public static void main(String[] args) throws Exception {
         String str = "{\"app_id\":\"10000\",\"email\":\"251878350@qq.com\",\"language\":\"cn\",\"pwd\":\"6a62fb8e21d8899b3bdcc0ade85ec734\"}";
         String key = "1234567890      ";
 
-        String hexResult = XXTeaUtil.encryptStr(str, "utf-8", key);
+        String hexResult = XxteaUtil.encryptStr(str, "utf-8", key);
         System.out.println("myencrypt: " + hexResult);
-        str = XXTeaUtil.decryptStr(hexResult, "utf-8", key);
+        str = XxteaUtil.decryptStr(hexResult, "utf-8", key);
         System.out.println("myDecrypt: " + str);
 
     }

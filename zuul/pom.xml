@@ -37,11 +37,22 @@
             <artifactId>spring-cloud-zuul-ratelimit</artifactId>
             <version>1.0.7.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>org.springframework.cloud</groupId>-->
             <!--<artifactId>spring-cloud-netflix-core</artifactId>-->
             <!--<version>1.4.6.RELEASE</version>-->
         <!--</dependency>-->
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
 
     </dependencies>
 

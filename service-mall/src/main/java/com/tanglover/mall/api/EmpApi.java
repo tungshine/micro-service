@@ -3,7 +3,6 @@ package com.tanglover.mall.api;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.tanglover.mall.aop.American;
 import com.tanglover.mall.aop.Chinese;
-import com.tanglover.mall.service.EmpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +27,6 @@ public class EmpApi extends BaseApi {
 
     @Value("${server.port}")
     private String port;
-
-    @Autowired
-    EmpService empService;
-
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public Map<String, Object> add() {

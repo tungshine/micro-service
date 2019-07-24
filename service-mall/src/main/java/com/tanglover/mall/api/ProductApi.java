@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.tanglover.mall.service.ProductService;
 import com.tanglover.mall.utils.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -67,5 +69,20 @@ public class ProductApi extends BaseApi {
         }
         long stock = reqJson.getLongValue("stock");
         return returnSuccess(productService.reduceStock(productId, stock));
+    }
+
+    /**
+     * @Author TangXu
+     * @Description 获取产品列表
+     * @Date 2019/7/23 17:53
+     * @Param [request]
+     */
+    @RequestMapping("/products")
+    public Map<String, Object> products(HttpServletRequest request) {
+        JSONObject reqJson = HttpUtils.getJSONObject(request);
+        if (null == reqJson) {
+            return returnError(10001, "参数错误");
+        }
+        return returnSuccess(productService.products(reqJson));
     }
 }

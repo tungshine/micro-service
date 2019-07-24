@@ -2,10 +2,10 @@ package com.tanglover.mall.service.mapper;
 
 import com.tanglover.mall.bean.Product;
 import com.tanglover.mall.service.mapper.provider.ProductProvider;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author TangXu
@@ -23,6 +23,15 @@ public interface ProductMapper {
      */
     @Select("SELECT * FROM product WHERE id = #{id}")
     Product selectByKey(@Param("id") Long id);
+
+    /**
+     * 获取产品列表
+     *
+     * @param conditions
+     * @return
+     */
+    @SelectProvider(type = ProductProvider.class, method = "getProductList")
+    List<Product> getProductList(Map<String, Object> conditions);
 
     /**
      * 修改产品

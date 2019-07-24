@@ -28,6 +28,13 @@ public class ProductService {
     @Autowired
     ProductMapper productMapper;
 
+    /**
+     * 增加库存
+     *
+     * @param productId
+     * @param stock
+     * @return
+     */
     public Map<String, Object> increaseStock(long productId, long stock) {
         Map<String, Object> retMap = new HashMap<>();
         Product product = productMapper.selectByKey(productId);
@@ -38,8 +45,15 @@ public class ProductService {
         return retMap;
     }
 
+    /**
+     * 减少库存
+     *
+     * @param productId
+     * @param reduceStock
+     * @return
+     */
     public Map<String, Object> reduceStock(long productId, long reduceStock) {
-        Map<String, Object> retMap = new HashMap<>();
+        Map<String, Object> retMap = new HashMap<>(0);
         Product product = productMapper.selectByKey(productId);
         product.setStock(reduceStock);
         product.setModify_time(System.currentTimeMillis());
@@ -48,8 +62,15 @@ public class ProductService {
         return retMap;
     }
 
-    public List<Product> products(JSONObject conditions) {
-        Map<String, Object> conditionMap = new HashMap<>();
+    /**
+     * 分页查询商品列表
+     *
+     * @param conditions
+     * @return
+     */
+    public Map<String, Object> products(JSONObject conditions) {
+        Map<String, Object> retMap = new HashMap<>(0);
+        Map<String, Object> conditionMap = new HashMap<>(0);
         String product_no = conditions.getString("product_no");
         long stock = conditions.getLongValue("stock");
         int pageNo = conditions.getIntValue("pageNo");
@@ -64,9 +85,15 @@ public class ProductService {
         }
         PageHelper.startPage(pageNo, pageSize);
         List<Product> productList = productMapper.getProductList(conditionMap);
-        PageInfo<Product> pageInfo = new PageInfo<>(productList);
-        long total = pageInfo.getTotal();
-        System.out.println(total);
-        return productList;
+        if (0 == productList.size()) {
+            retMap.put("list", productList);
+            retMap.put("total", 0);
+        } else {
+            PageInfo<Product> pageInfo = new PageInfo<>(productList);
+            long total = pageInfo.getTotal();
+            retMap.put("list", productList);
+            retMap.put("total", total);
+        }
+        return retMap;
     }
 }

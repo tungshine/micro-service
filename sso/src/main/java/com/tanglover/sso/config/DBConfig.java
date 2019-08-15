@@ -20,8 +20,6 @@ import java.util.Properties;
 //@Configuration
 public class DBConfig {
 
-
-
     @Bean
     @Primary
     public AtomikosDataSourceBean master(Environment env) {

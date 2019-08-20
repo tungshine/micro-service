@@ -28,4 +28,9 @@ public class UserApi extends BaseApi {
         SysUser user = (SysUser) HttpUtils.parseObject(request, SysUser.class);
         return returnSuccess(userService.insertSlave(user));
     }
+
+    @GetMapping("/loginPage")
+    public String loginPage() {
+        return "loginPage";
+    }
 }

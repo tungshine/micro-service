@@ -19,13 +19,13 @@ public class UserService {
     @Autowired
     SysUserDao sysUserDao;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public long insertMaster(SysUser user) throws SQLException {
         long insert = sysUserDao.insert(user);
         return insert;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public long insertSlave(SysUser user) throws SQLException {
         long insert = sysUserDao.insert(user);
         return insert;

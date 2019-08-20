@@ -16,19 +16,33 @@ public class Result {
     private int code;
     private Object data;
 
-    public static String returnSuccessString(String msg, int code, Object data) {
+    public static String returnSuccessString(String msg, Object data) {
         JSONObject result = new JSONObject();
         result.put("msg", msg);
-        result.put("code", code);
+        result.put("code", 0);
         result.put("data", data);
         return result.toJSONString();
     }
 
-    public static Map<String, Object> returnSuccessMap(String msg, int code, Object data) {
+    public static Map<String, Object> returnSuccessMap(String msg, Object data) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("msg", msg);
+        result.put("code", 0);
+        result.put("data", data);
+        return result;
+    }
+
+    public static String returnFailureString(String msg, int code) {
+        JSONObject result = new JSONObject();
+        result.put("msg", msg);
+        result.put("code", code);
+        return result.toJSONString();
+    }
+
+    public static Map<String, Object> returnFailureMap(String msg, int code) {
         Map<String, Object> result = new HashMap<>();
         result.put("msg", msg);
         result.put("code", code);
-        result.put("data", data);
         return result;
     }
 }

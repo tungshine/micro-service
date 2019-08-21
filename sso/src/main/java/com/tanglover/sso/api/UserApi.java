@@ -4,9 +4,9 @@ import com.tanglover.sso.jdbc.bean.SysUser;
 import com.tanglover.sso.service.UserService;
 import com.tanglover.sso.util.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ import java.util.Map;
  * @create 2019-05-27 11:32
  * @description:
  */
-@RestController
+@Controller
 public class UserApi extends BaseApi {
 
     @Autowired
@@ -29,8 +29,8 @@ public class UserApi extends BaseApi {
         return returnSuccess(userService.insertSlave(user));
     }
 
-    @GetMapping("/loginPage")
+    @RequestMapping("/loginPage")
     public String loginPage() {
-        return "loginPage";
+        return "login";
     }
 }

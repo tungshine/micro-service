@@ -1,5 +1,6 @@
 package com.tanglover.sso.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tanglover.sso.jdbc.bean.SysUser;
 import com.tanglover.sso.service.UserService;
 import com.tanglover.sso.util.HttpUtils;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -17,7 +19,7 @@ import java.util.Map;
  * @create 2019-05-27 11:32
  * @description:
  */
-@Controller
+@RestController
 public class UserApi extends BaseApi {
 
     @Autowired
@@ -29,8 +31,10 @@ public class UserApi extends BaseApi {
         return returnSuccess(userService.insertSlave(user));
     }
 
-    @RequestMapping("/loginPage")
-    public String loginPage() {
-        return "login";
+    @RequestMapping("/getUser")
+    public Map<String, Object> getUser(HttpServletRequest request) {
+        JSONObject jsonObject = HttpUtils.getJSONObject(request);
+        return null;
     }
+
 }

@@ -19,7 +19,7 @@ public class SecurityUser implements UserDetails, Serializable {
     private long id;
     private String username;
     private String password;
-
+    private List<GrantedAuthority> authorities;
 
     public long getId() {
         return id;
@@ -37,21 +37,23 @@ public class SecurityUser implements UserDetails, Serializable {
         this.password = password;
     }
 
+    public void setAuthorities(List<GrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     @Override

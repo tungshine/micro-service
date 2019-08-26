@@ -1,4 +1,4 @@
-package com.tanglover.security.config;
+package com.tanglover.security.config.datasource;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.atomikos.icatch.jta.UserTransactionManager;

@@ -17,9 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @description:
  */
 @Configuration
-public class SsoSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final static Logger logger = LoggerFactory.getLogger(SsoSecurityConfig.class);
+    private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     @Autowired
     RequestAccessDeniedHandler accessDeniedHandler;

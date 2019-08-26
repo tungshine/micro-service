@@ -19,8 +19,8 @@
         <module>service-mall</module>
         <module>service-B</module>
         <module>service-B2</module>
+        <module>service-spring-security</module>
         <module>sleuth</module>
-        <module>sso</module>
         <module>elasticsearch</module>
         <module>mq</module>
         <module>tx-spring-boot-starter</module>

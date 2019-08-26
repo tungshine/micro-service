@@ -27,7 +27,12 @@ import java.sql.SQLException;
 @Configuration
 public class DataSourceConfig {
 
-    // 事务管理器配置start
+    /**
+     * 事务管理器配置start
+     *
+     * @return
+     * @throws Throwable
+     */
     @Bean(name = "userTransaction")
     public UserTransaction userTransaction() throws Throwable {
         UserTransactionImp userTransactionImp = new UserTransactionImp();
@@ -51,7 +56,11 @@ public class DataSourceConfig {
         return jtaTransactionManager;
     }
 
-    //master数据源配置
+    /**
+     * master数据源配置
+     *
+     * @return
+     */
     @Primary
     @Bean(name = "masterDataSourceProperties")
     @Qualifier("masterDataSourceProperties")
@@ -84,7 +93,11 @@ public class DataSourceConfig {
         return jdbcTemplate;
     }
 
-    //slave数据源配置
+    /**
+     * slave数据源配置
+     *
+     * @return
+     */
     @Bean(name = "slaveDataSourceProperties")
     @Qualifier("slaveDataSourceProperties")
     @ConfigurationProperties(prefix = "spring.datasource.slave")

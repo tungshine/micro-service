@@ -29,7 +29,6 @@ public class BaseApi {
      * @param return_jsonData
      * @return
      */
-    //by jxh 2018-9-12
     public Map<String, Object> returnSuccess(JSONObject return_jsonData) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg", "success");
@@ -38,7 +37,6 @@ public class BaseApi {
         return map;
     }
 
-    // by TangXu 2018-10-24
     public Map<String, Object> returnSuccess(Map<String, Object> returnMap) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg", "success");
@@ -47,7 +45,6 @@ public class BaseApi {
         return map;
     }
 
-    // by chenchun 2018-11-26
     public Map<String, Object> returnSuccess(Object object) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg", "success");
@@ -63,7 +60,6 @@ public class BaseApi {
      * @param msg
      * @return
      */
-    //by jxh 2018-9-12
     public Map<String, Object> returnError(int error_code, String msg) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg", msg);

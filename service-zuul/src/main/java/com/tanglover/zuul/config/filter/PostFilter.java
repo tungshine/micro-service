@@ -7,11 +7,11 @@ import com.netflix.zuul.exception.ZuulException;
 import com.tanglover.zuul.elk.RequestMessageModel;
 import com.tanglover.zuul.error.ErrorCodeConstant;
 import com.tanglover.zuul.utils.HttpUtils;
-import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
@@ -60,7 +60,7 @@ public class PostFilter extends ZuulFilter {
         try {
             //这里截取返回数据
             String response_content = "";
-            if (ctx.getResponseStatusCode() == HttpStatus.SC_OK) {
+            if (ctx.getResponseStatusCode() == HttpStatus.OK.value()) {
                 // 因为这里没有使用restFull  所以业务服务器正常返回状态码
                 logger.info("request.getMethod()=={}", request.getMethod());
                 if (HttpMethod.GET.name().equalsIgnoreCase(request.getMethod())) {

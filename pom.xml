@@ -6,8 +6,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+        <module>activiti</module>
         <module>ribbon</module>
-        <module>zuul</module>
         <module>hystrix-ribbon</module>
         <module>feign</module>
         <module>hystrix-feign</module>
@@ -20,11 +20,11 @@
         <module>service-B</module>
         <module>service-B2</module>
         <module>service-spring-security</module>
+        <module>service-zuul</module>
         <module>sleuth</module>
         <module>elasticsearch</module>
         <module>mq</module>
         <module>tx-spring-boot-starter</module>
-        <module>activiti</module>
         <module>tx-lock-spring-boot-starter</module>
     </modules>
 

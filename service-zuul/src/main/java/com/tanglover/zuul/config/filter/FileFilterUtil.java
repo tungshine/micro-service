@@ -1,6 +1,5 @@
 package com.tanglover.zuul.config.filter;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 import javax.servlet.ServletRequest;

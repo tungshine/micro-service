@@ -13,6 +13,6 @@ RUN echo "http://mirrors.aliyun.com/alpine/v3.6/main" > /etc/apk/repositories \
     && apk add --no-cache procps unzip curl bash tzdata \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone
-ADD  zuul-0.0.1-SNAPSHOT.jar  ${MYPATH}/zuul_${VERSION}.jar
-ENTRYPOINT ["sh", "-c", "java  ${JAVA_OPTS}  -Djava.security.egd=file:/dev/./urandom  -jar ${MYPATH}/zuul_${VERSION}.jar && tail -f /dev/null"]
+ADD  service-zuul-0.0.1-SNAPSHOT.jar  ${MYPATH}/service-zuul_${VERSION}.jar
+ENTRYPOINT ["sh", "-c", "java  ${JAVA_OPTS}  -Djava.security.egd=file:/dev/./urandom  -jar ${MYPATH}/service-zuul_${VERSION}.jar && tail -f /dev/null"]
 EXPOSE 7073

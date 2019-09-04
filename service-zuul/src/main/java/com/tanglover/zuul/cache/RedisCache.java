@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 public class RedisCache {
     private static final Logger logger = LoggerFactory.getLogger(RedisCache.class);
 
-    // private static ExecutorService exec = Executors.newScheduledThreadPool(200);
     /**
      * 任务执行线程数200，队列缓冲数2000
      */
@@ -32,9 +31,9 @@ public class RedisCache {
             new LinkedBlockingQueue(10000));
 
     /**
-     * redis过期时间,默认30分钟
+     * redis过期时间,默认30分钟,设置为7天
      */
-    private final static long EXPIRE_TIME_IN_SECONDS = 60 * 60 * 24 * 7; // redis过期时间,缓存7天
+    private final static long EXPIRE_TIME_IN_SECONDS = 60 * 60 * 24 * 7;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -46,7 +45,7 @@ public class RedisCache {
      */
     public void cacheObject(ICacheable cacheable) {
         //调整缓存时间
-        this.cacheObject(cacheable, EXPIRE_TIME_IN_SECONDS, TimeUnit.SECONDS);// 序列化
+        this.cacheObject(cacheable, EXPIRE_TIME_IN_SECONDS, TimeUnit.SECONDS);
     }
 
     /**
@@ -57,7 +56,7 @@ public class RedisCache {
      */
     public void cacheObject(ICacheable cacheable, long EXPIRE_TIME_IN_SECONDS) {
         //调整缓存时间
-        this.cacheObject(cacheable, EXPIRE_TIME_IN_SECONDS, TimeUnit.SECONDS);// 序列化
+        this.cacheObject(cacheable, EXPIRE_TIME_IN_SECONDS, TimeUnit.SECONDS);
     }
 
     /**

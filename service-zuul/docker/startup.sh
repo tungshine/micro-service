@@ -1,5 +1,5 @@
 #!/bin/bash
-projectname="zuul_v"
+projectname="service-zuul_v"
 #首先验证镜像是否存在
 images_id=$(docker images | grep "$projectname" | awk "{print \$3}")
 if [ -n "$images_id" ]; then
@@ -24,10 +24,10 @@ else
     echo "存在$projectname 的镜像 ................ "
 fi
 
-cd /home/tx_workspace/project_git/micro-service/zuul &&
+cd /home/tx_workspace/project_git/micro-service/service-zuul &&
 mvn clean &&
 mvn install &&
-cd /home/tx_workspace/project_git/micro-service/zuul/target &&
-cp zuul-0.0.1-SNAPSHOT.jar ../docker &&
-cd /home/tx_workspace/project_git/micro-service/zuul/docker &&
-docker build -t alex/zuul:zuul_v1.0 .
+cd /home/tx_workspace/project_git/micro-service/service-zuul/target &&
+cp service-zuul-0.0.1-SNAPSHOT.jar ../docker &&
+cd /home/tx_workspace/project_git/micro-service/service-zuul/docker &&
+docker build -t alex/service-zuul:service-zuul_v1.0 .

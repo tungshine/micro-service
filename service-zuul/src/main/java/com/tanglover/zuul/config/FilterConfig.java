@@ -4,6 +4,7 @@ import com.tanglover.zuul.config.filter.RequestBodyFilter;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.RequestContextFilter;
 
 /**
@@ -11,7 +12,7 @@ import org.springframework.web.filter.RequestContextFilter;
  * @create 2019-04-22 14:27
  * @description:
  */
-@Configurable
+@Configuration
 public class FilterConfig {
 
     @Bean

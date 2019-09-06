@@ -21,4 +21,5 @@ public interface UserMapper {
      */
     @Select("SELECT * FROM t_user WHERE username = #{username}")
     SecurityUser loadByUsername(@Param("username") String username);
+
 }

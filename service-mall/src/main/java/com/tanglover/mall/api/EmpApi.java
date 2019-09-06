@@ -1,8 +1,10 @@
 package com.tanglover.mall.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.tanglover.mall.aop.American;
 import com.tanglover.mall.aop.Chinese;
+import com.tanglover.mall.utils.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -29,7 +32,9 @@ public class EmpApi extends BaseApi {
     private String port;
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public Map<String, Object> add() {
+    public Map<String, Object> add(HttpServletRequest request) {
+        JSONObject jsonObject = HttpUtils.getJSONObject(request);
+        logger.info(jsonObject.toJSONString());
         return returnSuccess("1");
     }
 

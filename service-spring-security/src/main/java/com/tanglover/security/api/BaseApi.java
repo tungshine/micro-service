@@ -1,7 +1,5 @@
 package com.tanglover.security.api;
 
-
-import com.alibaba.fastjson.JSONObject;
 import com.tanglover.security.util.HttpUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @Author TangXu
+ * @Description
+ * @Date 2019/9/10 15:01
+ */
 public class BaseApi {
 
     public byte[] fallbackError(HttpServletRequest request, HttpServletResponse response) {
@@ -23,34 +26,22 @@ public class BaseApi {
         return returnError(500, "The state of the network is not good");
     }
 
+    public Map<String, Object> returnMessage(String msg, int code, Object object) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("msg", msg);
+        map.put("result", code);
+        map.put("data", object);
+        return map;
+    }
+
     /**
      * 成功的时候反馈
      *
-     * @param return_jsonData
+     * @param object
      * @return
      */
-    public Map<String, Object> returnSuccess(JSONObject return_jsonData) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", "success");
-        map.put("result", 0);
-        map.put("data", return_jsonData);
-        return map;
-    }
-
-    public Map<String, Object> returnSuccess(Map<String, Object> returnMap) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", "success");
-        map.put("result", 0);
-        map.put("data", returnMap);
-        return map;
-    }
-
     public Map<String, Object> returnSuccess(Object object) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", "success");
-        map.put("result", 0);
-        map.put("data", object);
-        return map;
+        return returnMessage("success", 0, object);
     }
 
     /**
@@ -61,37 +52,6 @@ public class BaseApi {
      * @return
      */
     public Map<String, Object> returnError(int error_code, String msg) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", msg);
-        map.put("result", error_code);
-        return map;
+        return returnMessage(msg, error_code, null);
     }
-
-    /**
-     * 获取IP
-     */
-    public String getIpAddr(HttpServletRequest request) {
-        String ip = null;
-        try {
-            ip = request.getHeader("X-Forwarded-For");
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("Proxy-Client-IP");
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("WL-Proxy-Client-IP");
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("HTTP_CLIENT_IP");
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getRemoteAddr();
-            }
-        } catch (Exception ignored) {
-        }
-        return ip == null ? "" : ip;
-    }
-
 }

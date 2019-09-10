@@ -33,7 +33,7 @@ public class UserApi extends BaseApi {
     @RequestMapping("/getUser")
     public Map<String, Object> getUser(HttpServletRequest request) {
         JSONObject jsonObject = HttpUtils.getJSONObject(request);
-        return jsonObject;
+        return returnSuccess(jsonObject);
     }
 
 }

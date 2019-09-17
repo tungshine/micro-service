@@ -1,7 +1,6 @@
 package com.tanglover.mall.api;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.tanglover.mall.utils.HttpUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @Author TangXu
+ * @Description
+ * @Date 2019/9/17 13:57
+ */
 public class BaseApi {
 
     public byte[] fallbackError(HttpServletRequest request, HttpServletResponse response) {
@@ -23,37 +27,22 @@ public class BaseApi {
         return returnError(500, "The state of the network is not good");
     }
 
+    public Map<String, Object> returnMessage(String msg, int code, Object object) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("msg", msg);
+        map.put("result", code);
+        map.put("data", object);
+        return map;
+    }
+
     /**
      * 成功的时候反馈
      *
-     * @param return_jsonData
+     * @param object
      * @return
      */
-    //by jxh 2018-9-12
-    public Map<String, Object> returnSuccess(JSONObject return_jsonData) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", "success");
-        map.put("result", 0);
-        map.put("data", return_jsonData);
-        return map;
-    }
-
-    // by TangXu 2018-10-24
-    public Map<String, Object> returnSuccess(Map<String, Object> returnMap) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", "success");
-        map.put("result", 0);
-        map.put("data", returnMap);
-        return map;
-    }
-
-    // by chenchun 2018-11-26
     public Map<String, Object> returnSuccess(Object object) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", "success");
-        map.put("result", 0);
-        map.put("data", object);
-        return map;
+        return returnMessage("success", 0, object);
     }
 
     /**
@@ -63,12 +52,8 @@ public class BaseApi {
      * @param msg
      * @return
      */
-    //by jxh 2018-9-12
     public Map<String, Object> returnError(int error_code, String msg) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", msg);
-        map.put("result", error_code);
-        return map;
+        return returnMessage(msg, error_code, null);
     }
 
 }

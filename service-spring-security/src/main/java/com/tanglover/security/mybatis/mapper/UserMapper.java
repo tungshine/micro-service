@@ -19,7 +19,7 @@ public interface UserMapper {
      * @param username
      * @return
      */
-    @Select("SELECT * FROM t_user WHERE username = #{username}")
+    @Select("SELECT * FROM sys_user WHERE account = #{username}")
     SecurityUser loadByUsername(@Param("username") String username);
 
 }

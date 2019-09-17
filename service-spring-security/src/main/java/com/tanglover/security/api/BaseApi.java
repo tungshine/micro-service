@@ -14,6 +14,10 @@ import java.util.Map;
  */
 public class BaseApi {
 
+    private static final String MSG = "msg";
+    private static final String RESULT = "result";
+    private static final String DATA = "data";
+
     public byte[] fallbackError(HttpServletRequest request, HttpServletResponse response) {
         return HttpUtils.errorBytes(request, response, 500, "The state of the network is not good");
     }
@@ -28,9 +32,9 @@ public class BaseApi {
 
     public Map<String, Object> returnMessage(String msg, int code, Object object) {
         Map<String, Object> map = new HashMap<>();
-        map.put("msg", msg);
-        map.put("result", code);
-        map.put("data", object);
+        map.put(MSG, msg);
+        map.put(RESULT, code);
+        map.put(DATA, object);
         return map;
     }
 

@@ -1,5 +1,7 @@
 package com.tanglover.security.config.authentication;
 
+import com.tanglover.security.bean.SysRole;
+import com.tanglover.security.mybatis.mapper.RoleMapper;
 import com.tanglover.security.mybatis.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +26,8 @@ public class RequestUserService implements UserDetailsService {
 
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    RoleMapper roleMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -31,10 +35,14 @@ public class RequestUserService implements UserDetailsService {
         if (null == securityUser) {
             throw new UsernameNotFoundException("用戶名错误");
         }
-
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        User user = new User(securityUser.getUsername(), new BCryptPasswordEncoder().encode(securityUser.getPassword()), authorities);
-        return user;
+        List<SysRole> sysRoles = roleMapper.userRoles(securityUser.getId());
+        sysRoles.forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        });
+//        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        securityUser.setAuthorities(authorities);
+//        User user = new User(securityUser.getUsername(), new BCryptPasswordEncoder().encode(securityUser.getPassword()), authorities);
+        return securityUser;
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 public class SecurityUser implements UserDetails, Serializable {
 
     private long id;
-    private String account;
+    private String username;
     private String password;
     private List<GrantedAuthority> authorities;
 
@@ -27,42 +27,38 @@ public class SecurityUser implements UserDetails, Serializable {
         this.id = id;
     }
 
-    public String getAccount() {
-        return account;
+    @Override
+    public String getUsername() {
+        return username;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
     public String getPassword() {
         return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return account;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
     }
 
     public void setPassword(String password) {

@@ -14,17 +14,17 @@ import java.util.List;
  */
 public class SecurityUser implements UserDetails, Serializable {
 
-    private long id;
+    private long sys_user_id;
     private String username;
     private String password;
     private List<GrantedAuthority> authorities;
 
-    public long getId() {
-        return id;
+    public long getSys_user_id() {
+        return sys_user_id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setSys_user_id(long sys_user_id) {
+        this.sys_user_id = sys_user_id;
     }
 
     @Override

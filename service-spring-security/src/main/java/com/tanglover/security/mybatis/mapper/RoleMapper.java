@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author TangXu
@@ -29,11 +30,9 @@ public interface RoleMapper {
     /**
      * 查询用户角色列表
      *
-     * @param sys_user_id
+     * @param conditions
      * @return
      */
-//    @Select("SELECT * FROM sys_user_role where sys_user_id = #{sys_user_id}")
-//    List<SysRole> userRoles(@Param("sys_user_id") Long sys_user_id);
     @SelectProvider(type = RoleProvider.class, method = "userRoles")
-    List<SysRole> userRoles(@Param("sys_user_id") Long sys_user_id);
+    List<SysRole> userRoles(Map<String, Object> conditions);
 }

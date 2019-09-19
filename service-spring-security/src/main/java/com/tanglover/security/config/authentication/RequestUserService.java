@@ -14,7 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author TangXu
@@ -36,7 +38,9 @@ public class RequestUserService implements UserDetailsService {
             throw new UsernameNotFoundException("用戶名错误");
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
-        List<SysRole> sysRoles = roleMapper.userRoles(securityUser.getId());
+        Map<String, Object> conditions = new HashMap<>();
+        conditions.put("sys_user_id", securityUser.getSys_user_id());
+        List<SysRole> sysRoles = roleMapper.userRoles(conditions);
         sysRoles.forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });

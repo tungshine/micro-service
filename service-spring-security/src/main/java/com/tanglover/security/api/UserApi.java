@@ -1,6 +1,7 @@
 package com.tanglover.security.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.tanglover.security.jdbc.bean.SysUser;
 import com.tanglover.security.service.UserService;
 import com.tanglover.security.util.HttpUtils;
@@ -30,6 +31,7 @@ public class UserApi extends BaseApi {
         return returnSuccess(userService.insertSlave(user));
     }
 
+    @HystrixCommand(fallbackMethod = "fallbackError")
     @RequestMapping("/getUser")
     public Map<String, Object> getUser(HttpServletRequest request) {
         JSONObject jsonObject = HttpUtils.getJSONObject(request);

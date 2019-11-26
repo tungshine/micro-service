@@ -1,23 +1,19 @@
-package com.tanglover.security;
+package com.tanglover.captcha;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 
 /**
  * @author TangXu
- * @create 2019-05-15 11:11
+ * @create 2019-11-20 14:52
  * @description:
  */
 @SpringBootApplication
 @EnableEurekaClient
-@EnableHystrix
-@EnableDiscoveryClient
-public class SecurityApp {
+public class CaptchaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SecurityApp.class);
+        SpringApplication.run(CaptchaApplication.class, args);
     }
 }

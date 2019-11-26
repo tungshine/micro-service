@@ -44,6 +44,14 @@ public class EmpApi extends BaseApi {
         return "hi," + name + "I am a port:" + port;
     }
 
+    @RequestMapping("/testFallback")
+    @HystrixCommand(fallbackMethod = "fallbackError")
+    public Map<String, Object> testFallback(Map<String, Object> data) {
+        System.out.println(data.toString());
+        return returnError(500, "The state of the network is not good");
+    }
+
+
     @RequestMapping("/hiErr")
     public String hiErr(@RequestParam String name) {
         return "sorry," + name + ",have a error";

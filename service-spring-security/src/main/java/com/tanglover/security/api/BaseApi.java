@@ -22,6 +22,10 @@ public class BaseApi {
         return HttpUtils.errorBytes(request, response, 500, "The state of the network is not good");
     }
 
+    public Map<String, Object> fallbackError(HttpServletRequest request) {
+        return returnError(500, "The state of the network is not good");
+    }
+
     public Map<String, Object> fallbackError(Map<String, Object> data) {
         return returnError(500, "The state of the network is not good");
     }

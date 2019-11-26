@@ -26,6 +26,7 @@
         <module>mq</module>
         <module>tx-spring-boot-starter</module>
         <module>tx-lock-spring-boot-starter</module>
+        <module>service-captcha</module>
     </modules>
 
     <parent>

@@ -8,7 +8,6 @@ import com.netflix.zuul.http.ServletInputStreamWrapper;
 import com.tanglover.zuul.config.Configuration;
 import com.tanglover.zuul.error.ErrorCodeConstant;
 import com.tanglover.zuul.utils.HttpUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,8 +150,7 @@ public class FormBodyWrapperFilter extends ZuulFilter {
 
 
         //拦截检索
-        if (PreventIp(request)) {
-
+        if (preventIp(request)) {
             try {
                 // 1.对内容格式进行验证
                 JSONObject json = null;
@@ -185,7 +183,6 @@ public class FormBodyWrapperFilter extends ZuulFilter {
             } catch (Exception e) {
                 logger.error("请求错误", e);
             }
-
             return null;
         }
 
@@ -377,7 +374,6 @@ public class FormBodyWrapperFilter extends ZuulFilter {
         }
 
         private class FormHttpOutputMessage implements HttpOutputMessage {
-
             private HttpHeaders headers = new HttpHeaders();
             private ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -402,7 +398,7 @@ public class FormBodyWrapperFilter extends ZuulFilter {
      * 处理防刷IP拦截
      * @return true:该IP需要被拦截
      */
-    private boolean PreventIp(HttpServletRequest request) {
+    private boolean preventIp(HttpServletRequest request) {
 
         try {
             //首先判断 禁用的IP段功能开关 0:开启 1：关闭  是否开启
@@ -413,41 +409,33 @@ public class FormBodyWrapperFilter extends ZuulFilter {
             if (state == 1) {
                 return false;
             }
-
             String this_request_uri = request.getRequestURI().replace("/", "");
-
             //对需要筛选的接口进行判定
             String request_uri = config.getFORBIDDEN_IPS_URI();
             if (!StringUtils.hasLength(request_uri)) {
                 return false;
             }
-
             if (request_uri.indexOf(this_request_uri) == -1) {
                 //该次请求的接口 不在我们限制的接口范围内 直接返回正常流程
                 return false;
             }
-
             //下面进行IP判定处理
-
             String ip = IpUtils.getIpAddr(request);
             if (!StringUtils.hasLength(ip)) {
                 return false;
             }
             //对IP获取代理入口IP--即 客户端真实IP
             ip = ip.split(",")[0];
-
             //IP白名单检查处理
             if (ipUtils.isAllowIp(ip, config.getALLOW_IPS())) {
                 //正常返回--不予拦截
                 return false;
             }
-
             //IP黑名单检查处理
             if (ipUtils.isForbiddenIp(ip, config.getFORBIDDEN_IPS())) {
                 //拦截处理
                 return true;
             }
-
             //程序自动算法进行IP处理
             long expireSeconds = Integer.parseInt(config.getFORBIDDEN_IPS_TIME());
             int allow_count = Integer.parseInt(config.getFORBIDDEN_IPS_COUNT());
@@ -458,7 +446,6 @@ public class FormBodyWrapperFilter extends ZuulFilter {
         } catch (Exception e) {
             logger.error("防刷功能检查处理失败......", e);
         }
-
         return false;
     }
 }

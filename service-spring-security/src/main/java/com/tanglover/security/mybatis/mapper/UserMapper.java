@@ -1,12 +1,9 @@
 package com.tanglover.security.mybatis.mapper;
 
-import com.tanglover.security.bean.SysRole;
 import com.tanglover.security.config.authentication.SecurityUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
 
 /**
  * @author TangXu

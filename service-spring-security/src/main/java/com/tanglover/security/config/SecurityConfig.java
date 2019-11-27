@@ -11,6 +11,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author TangXu
  * @create 2019-08-15 17:33
@@ -49,7 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/index.html", "/static/**", "/loginPage");
+        String[] matchers = {"/index.html", "/static/**", "/loginPage", "/trace", "/actuator/*", "/httptrace",
+                "/health", "/info", "/heapdump", "/dump", "/auditevents", "/liquibase", "/flyway", "/env"};
+        web.ignoring().antMatchers(matchers);
     }
 
     @Override

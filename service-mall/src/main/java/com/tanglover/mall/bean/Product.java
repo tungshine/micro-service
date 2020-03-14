@@ -1,8 +1,6 @@
 package com.tanglover.mall.bean;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author TangXu

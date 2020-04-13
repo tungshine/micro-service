@@ -15,7 +15,7 @@ import java.util.Map;
  * @create 2019-07-16 15:02
  * @description:
  */
-@RestController
+//@RestController
 public class UserApi extends BaseApi {
 
     @Autowired

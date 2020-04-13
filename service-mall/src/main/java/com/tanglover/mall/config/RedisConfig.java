@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class RedisConfig {
 
 
-    public static String REDIS_HOST = "redis.tanglover.cn";
+    public static String REDIS_HOST = "212.64.82.82";
     public static String REDIS_PORT = "6379";
     public static String REDIS_PASSWORD = "tangxu!@#123`";
 

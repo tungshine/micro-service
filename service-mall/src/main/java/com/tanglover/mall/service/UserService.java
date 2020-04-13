@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  * @create 2019-07-16 15:10
  * @description:
  */
-@Service
+//@Service
 public class UserService {
 
     static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);

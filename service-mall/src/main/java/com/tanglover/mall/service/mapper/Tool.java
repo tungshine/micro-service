@@ -14,7 +14,7 @@ public class Tool {
     /**
      * 下划线转驼峰
      */
-    public static String lineToHump(String str) {
+    public static String under2Hump(String str) {
         str = str.toLowerCase();
         Matcher matcher = linePattern.matcher(str);
         StringBuffer sb = new StringBuffer();
@@ -30,7 +30,7 @@ public class Tool {
     /**
      * 驼峰转下划线,效率比上面高
      */
-    public static String humpToLine(String str) {
+    public static String hump2Underline(String str) {
         Matcher matcher = humpPattern.matcher(str);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {

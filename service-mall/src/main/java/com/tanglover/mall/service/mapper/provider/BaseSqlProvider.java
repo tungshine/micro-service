@@ -21,14 +21,14 @@ public class BaseSqlProvider<T> {
         SQL sql = new SQL();
         Class clazz = bean.getClass();
         String tableName = clazz.getSimpleName();
-        String realTableName = Tool.humpToLine(tableName).replaceAll("_entity", "").substring(1);
+        String realTableName = Tool.hump2Underline(tableName).replaceAll("_entity", "").substring(1);
         sql.INSERT_INTO(realTableName);
         List<Field> fields = getFields(clazz);
         for (Field field : fields) {
             field.setAccessible(true);
             String column = field.getName();
-            System.out.println("column:" + Tool.humpToLine(column));
-            sql.VALUES(Tool.humpToLine(column), String.format("#{" + column + ",jdbcType=VARCHAR}"));
+            System.out.println("column:" + Tool.hump2Underline(column));
+            sql.VALUES(Tool.hump2Underline(column), String.format("#{" + column + ",jdbcType=VARCHAR}"));
         }
         return sql.toString();
     }
@@ -37,7 +37,7 @@ public class BaseSqlProvider<T> {
         SQL sql = new SQL();
         Class clazz = bean.getClass();
         String tableName = clazz.getSimpleName();
-        String realTableName = Tool.humpToLine(tableName).replaceAll("_entity", "").substring(1);
+        String realTableName = Tool.hump2Underline(tableName).replaceAll("_entity", "").substring(1);
         sql.DELETE_FROM(realTableName);
         List<Field> primaryKeyField = getPrimaryKeyFields(clazz);
         if (!primaryKeyField.isEmpty()) {
@@ -87,7 +87,7 @@ public class BaseSqlProvider<T> {
         SQL sql = new SQL();
         Class clazz = bean.getClass();
         String tableName = clazz.getSimpleName();
-        String realTableName = Tool.humpToLine(tableName).replaceAll("_entity", "").substring(1);
+        String realTableName = Tool.hump2Underline(tableName).replaceAll("_entity", "").substring(1);
         sql.SELECT("*").FROM(realTableName);
         List<Field> primaryKeyField = getPrimaryKeyFields(clazz);
         if (!primaryKeyField.isEmpty()) {
@@ -109,7 +109,7 @@ public class BaseSqlProvider<T> {
         SQL sql = new SQL();
         Class clazz = bean.getClass();
         String tableName = clazz.getSimpleName();
-        String realTableName = Tool.humpToLine(tableName).replaceAll("_entity", "").substring(1);
+        String realTableName = Tool.hump2Underline(tableName).replaceAll("_entity", "").substring(1);
         sql.UPDATE(realTableName);
         List<Field> fields = getFields(clazz);
         for (Field field : fields) {
@@ -118,8 +118,8 @@ public class BaseSqlProvider<T> {
             if (column.equals("id")) {
                 continue;
             }
-            System.out.println(Tool.humpToLine(column));
-            sql.SET(Tool.humpToLine(column) + "=" + String.format("#{" + column + ",jdbcType=VARCHAR}"));
+            System.out.println(Tool.hump2Underline(column));
+            sql.SET(Tool.hump2Underline(column) + "=" + String.format("#{" + column + ",jdbcType=VARCHAR}"));
         }
 
         List<Field> primaryKeyField = getPrimaryKeyFields(clazz);

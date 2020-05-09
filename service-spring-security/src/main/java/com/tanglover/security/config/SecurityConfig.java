@@ -19,7 +19,7 @@ import java.util.List;
  * @create 2019-08-15 17:33
  * @description:
  */
-@Configuration
+//@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);

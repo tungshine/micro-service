@@ -98,6 +98,21 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- Finchley版本文件上传feign扩展包 -->
+        <dependency>
+            <groupId>io.github.openfeign.form</groupId>
+            <artifactId>feign-form</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign.form</groupId>
+            <artifactId>feign-form-spring</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <!-- end -->
+
+
     </dependencies>
 
     <dependencyManagement>

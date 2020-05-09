@@ -111,6 +111,20 @@
             <version>1.3.3</version>
         </dependency>
 
+        <!-- Finchley版本文件上传feign扩展包 -->
+        <dependency>
+            <groupId>io.github.openfeign.form</groupId>
+            <artifactId>feign-form</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign.form</groupId>
+            <artifactId>feign-form-spring</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <!-- end -->
+
+
         <!--<dependency>-->
         <!--<groupId>com.tanglover</groupId>-->
         <!--<artifactId>tx-spring-boot-starter</artifactId>-->

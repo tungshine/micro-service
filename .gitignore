@@ -5,3 +5,5 @@
 /logs
 *.iml
 /*/logs
+tmlog.lck
+tmlog5.log

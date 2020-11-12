@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tanglover.mall.service.UserService;
 import com.tanglover.mall.utils.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  * @create 2019-07-16 15:02
  * @description:
  */
-//@RestController
+@RestController
 public class UserApi extends BaseApi {
 
     @Autowired
@@ -38,5 +39,11 @@ public class UserApi extends BaseApi {
         long count = reqJson.getLongValue("count");
         Map<String, Object> grab = userService.grabForRedis(userId, productId, count);
         return returnSuccess(grab);
+    }
+
+    @PostMapping("/user/login")
+    public Map<String, Object> login(HttpServletRequest request) {
+        JSONObject jsonObject = HttpUtils.getJSONObject(request);
+        return returnSuccess(jsonObject);
     }
 }
